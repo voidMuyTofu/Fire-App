@@ -70,12 +70,6 @@ public class ChatFragment extends Fragment {
         productName = getArguments().get("title").toString();
         imageUrl = getArguments().get("url").toString();
 
-        etMessage = view.findViewById(R.id.fir_message_edit_text);
-        tiMessage = view.findViewById(R.id.fir_message_text_input);
-        btSend = view.findViewById(R.id.fir_bt_send);
-        tvProductName = view.findViewById(R.id.fir_product_name);
-        recyclerView = view.findViewById(R.id.fir_list_messages);
-
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -88,22 +82,6 @@ public class ChatFragment extends Fragment {
                 sendMessage(firebaseUser.getUid(), userId, message, productName);
             }
         });
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                readMessage(firebaseUser.getUid(), userId, productName);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-
 
         return view;
     }
@@ -206,6 +184,13 @@ public class ChatFragment extends Fragment {
         super.onResume();
     }
 
+    private void initComponents(View view){
+        etMessage = view.findViewById(R.id.fir_message_edit_text);
+        tiMessage = view.findViewById(R.id.fir_message_text_input);
+        btSend = view.findViewById(R.id.fir_bt_send);
+        tvProductName = view.findViewById(R.id.fir_product_name);
+        recyclerView = view.findViewById(R.id.fir_list_messages);
+    }
 
 
 
