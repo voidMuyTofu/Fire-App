@@ -25,9 +25,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-/**
- * Fragment representing the login screen for Shrine.
- */
 public class LoginFragment extends Fragment {
 
     private FirebaseAuth auth;
@@ -36,26 +33,14 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fir_login_fragment, container, false);
-
-
-        final TextInputLayout emailTextInput = view.findViewById(R.id.email_text_input);
-        final TextInputEditText emailEditText = view.findViewById(R.id.email_edit_text);
-        final TextInputLayout passwordTextInput = view.findViewById(R.id.password_text_input);
-        final TextInputEditText passwordEditText = view.findViewById(R.id.password_edit_text);
-        final TextView tvNewUser = view.findViewById(R.id.fir_new_user);
-        MaterialButton btNext = view.findViewById(R.id.next_button);
+        
+        initComponents(view);
 
         auth = FirebaseAuth.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if(firebaseUser != null){
-            Intent intent = new Intent(getContext(), MainActivity.class);
-            startActivity(intent);
-        }
-
-
+        checkForSignedUser();
 
         //Error para el campo contraseña
         btNext.setOnClickListener(new View.OnClickListener() {
@@ -74,18 +59,9 @@ public class LoginFragment extends Fragment {
                 }
 
                 passwordTextInput.setError(null);
-                auth.signInWithEmailAndPassword(email,pass)
-                        .addOnCompleteListener((Activity) v.getContext(), new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    Intent intent = new Intent(getContext(), MainActivity.class);
-                                    startActivity(intent);
-                                }else{
-                                    Toast.makeText(getContext(),"Usuario incorrecto",Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                emailTextInput.setError(null);
+                
+                signInWithEmailAndPass(email,pass);
             }
         });
 
@@ -103,5 +79,36 @@ public class LoginFragment extends Fragment {
 
     private boolean isPasswordValid(@Nullable String pass){
         return pass != null && pass.length() >= 8;
+    }
+    
+    private checkForSignedUser(){
+        if(firebaseUser != null){
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            startActivity(intent);
+        }
+    }
+    
+    private initComponents(View view){
+        TextInputLayout emailTextInput = view.findViewById(R.id.email_text_input);
+        TextInputEditText emailEditText = view.findViewById(R.id.email_edit_text);
+        TextInputLayout passwordTextInput = view.findViewById(R.id.password_text_input);
+        TextInputEditText passwordEditText = view.findViewById(R.id.password_edit_text);
+        TextView tvNewUser = view.findViewById(R.id.fir_new_user);
+        MaterialButton btNext = view.findViewById(R.id.next_button);
+    }
+    
+    private signInWithEmailAndPassword(String email, String pass){
+        auth.signInWithEmailAndPassword(email,pass)
+                        .addOnCompleteListener((Activity) v.getContext(), new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    Intent intent = new Intent(getContext(), MainActivity.class);
+                                    startActivity(intent);
+                                }else{
+                                    Toast.makeText(getContext(),"Usuario incorrecto",Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
     }
 }
