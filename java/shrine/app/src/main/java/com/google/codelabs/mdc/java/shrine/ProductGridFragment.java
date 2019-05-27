@@ -70,19 +70,16 @@ public class ProductGridFragment extends Fragment {
         products = new ArrayList<>();
         productImages = new ArrayList<>();
 
-
+        //llamamos a la referencia de la base de datos y conseguimos los productEntry guardados
         updateDatabase();
 
 
         //inicializar componentes
-        btAbout = view.findViewById(R.id.backdrop_about);
-        btMessages = view.findViewById(R.id.backdrop_messages);
-        btSettings = view.findViewById(R.id.backdrop_settings);
-        fab = view.findViewById(R.id.fir_fab_add);
+        initComponents(view);
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),
-                2,GridLayoutManager.VERTICAL,false));
+                2,GridLayoutManager.VERTICAL,false));  
 
         //Listener boton Nuevo producto
         fab.setOnClickListener(v -> ((NavigationHost)getContext()).navigateTo(new FormFragment(), true));
@@ -96,19 +93,12 @@ public class ProductGridFragment extends Fragment {
 
         ProductCardRecyclerViewAdapter adapter = new ProductCardRecyclerViewAdapter(
                 products,getContext(), item -> {
-                    Bundle bundle = new Bundle();
-                    System.out.println(item.getIdUser());
-                    bundle.putString("title",item.getTitle());
-                    bundle.putString("description", item.getDescription());
-                    bundle.putString("price", item.getPrice());
-                    bundle.putString("size", item.getSize());
-                    bundle.putString("url", item.getUrl());
-                    bundle.putString("userId", item.getIdUser());
-                    bundle.putStringArray("imagesurl", item.getImages());
-
+                    Bundle bundle = createBundle(item);
                     ((NavigationHost)getContext()).navigateTo(new ProductPageFragment(), true, bundle);
 
                 });
+        
+        
         recyclerView.setAdapter(adapter);
         int largePadding = getResources().getDimensionPixelSize(R.dimen.fir_product_grid_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.fir_staggered_product_grid_spacing_small);
@@ -178,5 +168,22 @@ public class ProductGridFragment extends Fragment {
                 break;
         }
         return false;
+    }
+    private void initComponents(View view){
+        btAbout = view.findViewById(R.id.backdrop_about);
+        btMessages = view.findViewById(R.id.backdrop_messages);
+        btSettings = view.findViewById(R.id.backdrop_settings);
+        fab = view.findViewById(R.id.fir_fab_add);
+    }
+    private Bundle createBundle(ProductEntry item){
+        Bundle bundle = new Bundle();
+                    bundle.putString("title",item.getTitle());
+                    bundle.putString("description", item.getDescription());
+                    bundle.putString("price", item.getPrice());
+                    bundle.putString("size", item.getSize());
+                    bundle.putString("url", item.getUrl());
+                    bundle.putString("userId", item.getIdUser());
+                    bundle.putStringArray("imagesurl", item.getImages());
+        return bundle;
     }
 }
