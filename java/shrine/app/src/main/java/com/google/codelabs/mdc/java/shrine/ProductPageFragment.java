@@ -19,9 +19,10 @@ public class  ProductPageFragment extends Fragment {
     private TextView tvSize;
     private TextView tvPrice;
     private MaterialButton btMessage;
-    private NetworkImageView ivImage;
-    private ImageRequester imageRequester;
+    private ImageView ivImage;
     private String [] images;
+    
+    private FirebaseUser firebaseUser;
 
 
     @Override
@@ -30,6 +31,8 @@ public class  ProductPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fir_product_page_fragment, container, false);
 
         initComponent(view);
+        
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         
         displayInfo();
 
@@ -51,7 +54,9 @@ public class  ProductPageFragment extends Fragment {
             //tvSize.setText((CharSequence) bundle.get("size"));
             tvDescription.setText((CharSequence) bundle.get("description"));
             tvPrice.setText((CharSequence) bundle.get("price"));
-            imageRequester.setImageFromUrl(ivImage, String.valueOf(bundle.get("url")));
+            Glide.with(getContext()).load(bundle.get("url")).into(ivImage);
+            if(bundle.get("userId").equals(firebaseUser.getUid()))
+                btMessages.setVisible(false);
             images = (String[]) bundle.get("imagesurl");
         }
     }
@@ -63,6 +68,5 @@ public class  ProductPageFragment extends Fragment {
         tvSize = view.findViewById(R.id.fir_product_size);
         ivImage = view.findViewById(R.id.fir_product_image);
         btMessage = view.findViewById(R.id.fir_bt_message);
-        imageRequester = ImageRequester.getInstance();
     }
 }
