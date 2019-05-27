@@ -30,25 +30,9 @@ public class  ProductPageFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fir_product_page_fragment, container, false);
 
-        tvTitle = view.findViewById(R.id.fir_product_title);
-        tvDescription = view.findViewById(R.id.fir_product_descripction);
-        tvPrice = view.findViewById(R.id.fir_product_price);
-        tvSize = view.findViewById(R.id.fir_product_size);
-        ivImage = view.findViewById(R.id.fir_product_image);
-        btMessage = view.findViewById(R.id.fir_bt_message);
-        imageRequester = ImageRequester.getInstance();
-
-        Bundle bundle;
-        bundle = this.getArguments();
-
-        if(bundle != null){
-            tvTitle.setText((CharSequence) bundle.get("title"));
-            //tvSize.setText((CharSequence) bundle.get("size"));
-            tvDescription.setText((CharSequence) bundle.get("description"));
-            tvPrice.setText((CharSequence) bundle.get("price"));
-            imageRequester.setImageFromUrl(ivImage, String.valueOf(bundle.get("url")));
-            images = (String[]) bundle.get("imagesurl");
-        }
+        initComponent(view);
+        
+        displayInfo();
 
         btMessage.setOnClickListener(v -> {
             Bundle bundle1 = new Bundle();
@@ -59,6 +43,27 @@ public class  ProductPageFragment extends Fragment {
         });
         return view;
     }
-
-
+    
+    private displayInfo(){
+        Bundle bundle;
+        bundle = this.getArguments();
+        if(bundle != null){
+            tvTitle.setText((CharSequence) bundle.get("title"));
+            //tvSize.setText((CharSequence) bundle.get("size"));
+            tvDescription.setText((CharSequence) bundle.get("description"));
+            tvPrice.setText((CharSequence) bundle.get("price"));
+            imageRequester.setImageFromUrl(ivImage, String.valueOf(bundle.get("url")));
+            images = (String[]) bundle.get("imagesurl");
+        }
+    }
+    
+    private void initComponent(View view){
+        tvTitle = view.findViewById(R.id.fir_product_title);
+        tvDescription = view.findViewById(R.id.fir_product_descripction);
+        tvPrice = view.findViewById(R.id.fir_product_price);
+        tvSize = view.findViewById(R.id.fir_product_size);
+        ivImage = view.findViewById(R.id.fir_product_image);
+        btMessage = view.findViewById(R.id.fir_bt_message);
+        imageRequester = ImageRequester.getInstance();
+    }
 }
