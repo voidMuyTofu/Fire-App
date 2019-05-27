@@ -53,14 +53,7 @@ public class  RegisterUser extends Fragment {
         auth = FirebaseAuth.getInstance();
 
         //inicializar componentes
-        tiUsername = view.findViewById(R.id.username_text_input);
-        tiPass = view.findViewById(R.id.password_text_input);
-        tiEmail = view.findViewById(R.id.email_text_input);
-        etUsername = view.findViewById(R.id.username_edit_text);
-        etPass = view.findViewById(R.id.password_edit_text);
-        etEmail = view.findViewById(R.id.email_edit_text);
-        btNext = view.findViewById(R.id.next_button);
-        btCancel = view.findViewById(R.id.cancel_button);
+        initComponents(view);
 
 
         btNext.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +75,10 @@ public class  RegisterUser extends Fragment {
                     tiEmail.setError(getString(R.string.fir_error_email));
                     return;
                 }
+                
+                tiUsername.setError(null);
+                tiPass.setError(null);
+                tiEmail.setError(null);
 
                 registerUser(username, email, password);
             }
@@ -91,7 +88,6 @@ public class  RegisterUser extends Fragment {
     }
 
     private void registerUser(final String username, String email, String pass) {
-
         auth.createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -120,12 +116,15 @@ public class  RegisterUser extends Fragment {
                     }
                 });
     }
+    
     private boolean isPasswordValid(@Nullable String pass){
         return pass != null && pass.length() >= 8;
     }
+    
     private boolean isUserValid(@Nullable String user){
         return user != null && user.length() >= 6;
     }
+    
     public static boolean isValidEmailAddress(String email) {
         boolean result = true;
         try {
@@ -137,4 +136,14 @@ public class  RegisterUser extends Fragment {
         return result;
     }
 
+    private void initComponents(View view){
+        tiUsername = view.findViewById(R.id.username_text_input);
+        tiPass = view.findViewById(R.id.password_text_input);
+        tiEmail = view.findViewById(R.id.email_text_input);
+        etUsername = view.findViewById(R.id.username_edit_text);
+        etPass = view.findViewById(R.id.password_edit_text);
+        etEmail = view.findViewById(R.id.email_edit_text);
+        btNext = view.findViewById(R.id.next_button);
+        btCancel = view.findViewById(R.id.cancel_button);
+    }
 }
