@@ -49,11 +49,11 @@ public class LoginFragment extends Fragment {
                 String email = emailEditText.getText().toString();
                 String pass = passwordEditText.getText().toString();
 
-                if(!(isPasswordValid(pass))){
+                if(!(isPasswordValid(pass))) {
                     passwordTextInput.setError(getString(R.string.fir_error_password));
                     return;
                 }
-                if(TextUtils.isEmpty(email)){
+                if(isValidEmailAddress(email)) {
                     emailTextInput.setError(getString(R.string.fir_error_email));
                     return;
                 }
@@ -88,15 +88,6 @@ public class LoginFragment extends Fragment {
         }
     }
     
-    private initComponents(View view){
-        TextInputLayout emailTextInput = view.findViewById(R.id.email_text_input);
-        TextInputEditText emailEditText = view.findViewById(R.id.email_edit_text);
-        TextInputLayout passwordTextInput = view.findViewById(R.id.password_text_input);
-        TextInputEditText passwordEditText = view.findViewById(R.id.password_edit_text);
-        TextView tvNewUser = view.findViewById(R.id.fir_new_user);
-        MaterialButton btNext = view.findViewById(R.id.next_button);
-    }
-    
     private signInWithEmailAndPassword(String email, String pass){
         auth.signInWithEmailAndPassword(email,pass)
                         .addOnCompleteListener((Activity) v.getContext(), new OnCompleteListener<AuthResult>() {
@@ -110,5 +101,25 @@ public class LoginFragment extends Fragment {
                                 }
                             }
                         });
+    }
+    
+    public static boolean isValidEmailAddress(String email) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
+    }
+    
+    private initComponents(View view){
+        TextInputLayout emailTextInput = view.findViewById(R.id.email_text_input);
+        TextInputEditText emailEditText = view.findViewById(R.id.email_edit_text);
+        TextInputLayout passwordTextInput = view.findViewById(R.id.password_text_input);
+        TextInputEditText passwordEditText = view.findViewById(R.id.password_edit_text);
+        TextView tvNewUser = view.findViewById(R.id.fir_new_user);
+        MaterialButton btNext = view.findViewById(R.id.next_button);
     }
 }
