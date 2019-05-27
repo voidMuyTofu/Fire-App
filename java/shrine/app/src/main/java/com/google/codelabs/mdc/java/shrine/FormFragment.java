@@ -133,10 +133,7 @@ public class FormFragment extends Fragment {
             uploadProduct();
             ((NavigationHost)getContext()).navigateTo(new ProductGridFragment(), false);
         });
-
-
-
-
+            
         return view;
     }
 
@@ -157,7 +154,6 @@ public class FormFragment extends Fragment {
         if(activity != null) {
             activity.setSupportActionBar(toolbar);
         }
-
     }
     private void uploadProduct() {
         List<String> imagesToUpload = new ArrayList<>();
@@ -187,20 +183,30 @@ public class FormFragment extends Fragment {
         }
 
         if(etName.getText().toString().equals("")){
-            //hacer errores
-        }
-        if(etPrice.getText().toString().equals("")){
-            //hacer errores
-        }
-        if(etSize.getText().toString().equals("")){
-            //hacer errores
+            etName.setError(@strings/fir_error_title);
+            return;
         }
         if(etDescription.getText().toString().equals("")){
-            //hacer errores
+            etDescription.setError(@strings/fir_error_description);
+            return;       
         }
+        if(etSize.getText().toString().equals("")){
+            etSize.setError(@strings/fir_error_size);
+            return;       
+        }
+        if(etPrice.getText().toString().equals("")){
+            etPrice.setError(@strings/fir_error_price);
+            return;
+        }
+
         if(imagesToUpload.size() == 0){
-            //hacer error
+            Toast.makeToast(getContext(), "Debes seleccionar al menos una imagen", Toast.LENGHT.LONG).show;
         }
+           
+        etName.setError(null);
+        etDescription.setError(null);
+        etSize.setError(null);
+        etPrice.setError(null);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("title", etName.getText().toString());
