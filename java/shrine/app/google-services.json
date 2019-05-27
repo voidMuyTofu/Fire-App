@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "542569252927",
+    "firebase_url": "https://proyectofinal-d6a6d.firebaseio.com",
+    "project_id": "proyectofinal-d6a6d",
+    "storage_bucket": "proyectofinal-d6a6d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542569252927:android:b878320f8f4e3cac",
+        "android_client_info": {
+          "package_name": "com.google.codelabs.mdc.java.fire"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542569252927-fejl7vlp4gdp62e0i62oh96rhovg3sho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.codelabs.mdc.java.fire",
+            "certificate_hash": "b4736c63d2b9e1e2fe3a321c480b0adcd8942dc2"
+          }
+        },
+        {
+          "client_id": "542569252927-rm5rh0v4pik9taopo5dfmhmagau9gh0u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2ldkytnyM_YjMxkGPaNupzi2WeAuWvZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542569252927-rm5rh0v4pik9taopo5dfmhmagau9gh0u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542569252927:android:840ce2c7bd173f5b",
+        "android_client_info": {
+          "package_name": "com.google.codelabs.mdc.java.shrine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542569252927-mk3daatfgto3pdi5fmfanpc81bug4a16.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.codelabs.mdc.java.shrine",
+            "certificate_hash": "b4736c63d2b9e1e2fe3a321c480b0adcd8942dc2"
+          }
+        },
+        {
+          "client_id": "542569252927-eiu3pmrjkego6ee5b2pls3esgicv8mpq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.codelabs.mdc.java.shrine",
+            "certificate_hash": "54330fbee371a5b77d55690b81be1c32043f4d6e"
+          }
+        },
+        {
+          "client_id": "542569252927-rm5rh0v4pik9taopo5dfmhmagau9gh0u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2ldkytnyM_YjMxkGPaNupzi2WeAuWvZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542569252927-rm5rh0v4pik9taopo5dfmhmagau9gh0u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,45 @@
+<resources>
+    <string name="fir_app_name">Fire</string>
+    <string name="fir_hint_username">Nombre de usuario</string>
+    <string name="fir_hint_password">Contraseña</string>
+    <string name="fir_button_next">Confirmar</string>
+    <string name="fir_button_cancel">Cancelar</string>
+    <string name="fir_error_email">Introduce un email válido</string>
+    <string name="fir_error_username">El usuario debe tener al menos 6 caracteres</string>
+    <string name="fir_error_password">La contraseña debe tener al menos 8 caracteres.</string>
+    <string name="fir_filter_title">Filtro</string>
+    <string name="fir_search_title">Busqueda</string>
+    <string name="fir_user_image">Foto</string>
+    <string name="fir_cancel">Cancelar</string>
+    <string name="fir_product_title">Title</string>
+    <string name="fir_new_product">Nuevo Producto</string>
+    <string name="fir_email">Correo Electrónico</string>
+    <string name="fir_contact">Negociar</string>
+    <string name="fir_register">¿No tienes cuenta? Registrate</string>
+
+    <!-- Strings para el loginOptions-->
+    <string name="fir_login_with">Inicie sesion con:</string>
+    <string name="fir_login_fire_acc">Cuenta de Fire</string>
+    <string name="fir_login_google_acc">Cuenta de Google</string>
+    <string name="fir_login_twitter_acc">Cuenta de Twitter</string>
+    <!-- Shrine backdrop menu labels -->
+    <string name="fir_ropa_label">Ropa</string>
+    <string name="fir_accesorios_label">Accesorios</string>
+    <string name="fir_sneakers_label">Sneakers</string>
+    <string name="fir_perfil_label">Mi Perfil</string>
+
+    <!-- String para componentes de la app -->
+
+    <string name="fir_extended_fab_buy">Contactar vendedor</string>
+    <string name="fir_product_name">Nombre</string>
+    <string name="fir_product_price">Precio</string>
+    <string name="fir_product_size">Talla</string>
+    <string name="fir_product_description">Descripción</string>
+    <string name="fir_sing_out">Cerrar sesión</string>
+    <string name="fir_chats">Mensajes</string>
+    <string name="fir_about">Acerca de</string>
+    <string name="fir_settings">Ajustes</string>
+    <string name="fir_upload">Subir</string>
+
+
+</resources>

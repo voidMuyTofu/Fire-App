@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FormFragment">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/fir_appbar_chat"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/fir_toolbar_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark">
+
+            <ImageView
+                android:id="@+id/fir_bt_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/left_arrow"
+                />
+
+            <TextView
+                android:id="@+id/fir_new_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Fire.Subtitle"
+                android:paddingLeft="130dp"
+                android:paddingRight="130dp"
+                android:text="@string/fir_new_product"/>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:paddingTop="60dp">
+
+        <ImageButton
+            android:id="@+id/image_1"
+            android:layout_margin="6dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:srcCompat="@drawable/camera"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@null"/>
+        <ImageButton
+            android:id="@+id/image_2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="6dp"
+            app:srcCompat="@drawable/camera"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@null"/>
+        <ImageButton
+            android:id="@+id/image_3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="6dp"
+            app:srcCompat="@drawable/camera"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@null"/>
+        <ImageButton
+            android:id="@+id/image_4"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="6dp"
+            app:srcCompat="@drawable/camera"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@null"/>
+        <ImageButton
+            android:id="@+id/image_5"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="6dp"
+            app:srcCompat="@drawable/camera"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@null"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingRight="24dp"
+        android:paddingLeft="24dp"
+        android:paddingTop="175dp"
+        >
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_name_text_input"
+            style="@style/Widget.Fire.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/fir_product_name"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/product_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_description_text_input"
+            style="@style/Widget.Fire.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/fir_product_description"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/product_description_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_size_text_input"
+            style="@style/Widget.Fire.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/fir_product_size"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/product_size_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_price_text_input"
+            style="@style/Widget.Fire.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/fir_product_price"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/product_price_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.button.MaterialButton
+            android:id="@+id/upload_button"
+            style="@style/Widget.Fire.Button"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/fir_upload" />
+    </LinearLayout>
+
+</FrameLayout>
