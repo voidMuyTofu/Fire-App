@@ -37,6 +37,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvSize;
     private TextView tvPrice;
     private MaterialButton btMessage;
+    private DatabaseReference reference;
     private ImageView ivImage;
     private CircleImageView profileImage;
     private String [] images;
@@ -56,6 +57,7 @@ public class ProfileFragment extends Fragment {
         initComponent(view);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("users");
 
         displayInfo();
 
@@ -76,7 +78,7 @@ public class ProfileFragment extends Fragment {
         bundle = this.getArguments();
         if(bundle != null){
             tvTitle.setText((CharSequence) bundle.get("title"));
-            //tvSize.setText((CharSequence) bundle.get("size"));
+            tvSize.setText((CharSequence) bundle.get("size"));
             tvDescription.setText((CharSequence) bundle.get("description"));
             tvPrice.setText((CharSequence) bundle.get("price"));
             Glide.with(getContext()).load(bundle.get("url")).into(ivImage);
@@ -110,5 +112,22 @@ public class ProfileFragment extends Fragment {
             imageUri = data.getData();
             profileImage.setImageURI(imageUri);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

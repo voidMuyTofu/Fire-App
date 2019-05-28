@@ -41,6 +41,7 @@ public class ProductCardRecyclerViewAdapter extends RecyclerView.Adapter<Product
             ProductEntry product = productList.get(position);
             holder.productTitle.setText(product.getTitle());
             holder.productPrice.setText(product.getPrice());
+            System.out.println(product.getTitle());
             Glide.with(context).load(product.getUrl()).into(holder.productImage);
             holder.bind(productList.get(position),listener);
         }

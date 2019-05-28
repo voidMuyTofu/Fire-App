@@ -92,7 +92,7 @@ public class LoginFragment extends Fragment {
     
     private void signInWithEmailAndPassword(String email, String pass){
         auth.signInWithEmailAndPassword(email,pass)
-                        .addOnCompleteListener((Activity) getContext(), (OnCompleteListener<AuthResult>) task -> {
+                        .addOnCompleteListener((Activity) getContext(), task -> {
                             if(task.isSuccessful()){
                                 Intent intent = new Intent(getContext(), MainActivity.class);
                                 startActivity(intent);

@@ -26,10 +26,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private Context context;
     private List<ChatList> chats;
+    private OnRecyclerClickListener listener;
 
-    public ChatAdapter(Context context, List<ChatList> chats){
+    public ChatAdapter(Context context, List<ChatList> chats , OnRecyclerClickListener listener){
         this.context = context;
         this.chats = chats;
+        this.listener = listener;
     }
 
     @NonNull
@@ -45,6 +47,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         viewHolder.tvChatName.setText(chat.getProductName());
         Glide.with(context).load(chat.getImageUrl()).into(viewHolder.productImage);
+        viewHolder.bind(chats.get(i), listener);
     }
 
     @Override

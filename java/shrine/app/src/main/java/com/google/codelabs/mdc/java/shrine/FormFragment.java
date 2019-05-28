@@ -42,9 +42,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * Fragment representing the login screen for Shrine.
- */
+
 public class FormFragment extends Fragment {
 
     private Uri imageUri;

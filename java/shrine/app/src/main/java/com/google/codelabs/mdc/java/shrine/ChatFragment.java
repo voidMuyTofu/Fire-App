@@ -119,16 +119,22 @@ public class ChatFragment extends Fragment {
 
         //abrir una conversacion para el nuevo chat
 
-        final DatabaseReference chatref = FirebaseDatabase.getInstance().getReference("chatlist")
-                .child(firebaseUser.getUid());
+        final DatabaseReference chatref = FirebaseDatabase.getInstance().getReference("chatlist");
         chatref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
-                    chatref.child("fbuser").setValue(firebaseUser.getUid());
-                    chatref.child("userid").setValue(userId);
+                    HashMap<String, Object> hashmap = new HashMap();
+                    map.put("fbuser", sender);
+                    map.put("userid", reciever);
+                    map.put("productname", message);
+                    map.put("productname", productName);
+                    map.put("isseen", false);
                 }
-
+                chatref.child("fbuser").setValue(firebaseUser.getUid());
+                chatref.child("userid").setValue(userId);
+                chatref.child("productname").setValue(productName);
+                reference.child("chat").push().setValue(map);
             }
 
             @Override
@@ -195,8 +201,6 @@ public class ChatFragment extends Fragment {
         switch (item.getItemId()){
             case R.id.sign_out:
                 return true;
-            case R.id.search:
-                break;
         }
         return false;
     }

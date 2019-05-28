@@ -136,8 +136,6 @@ public class ProductGridUserFragment extends Fragment {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getContext(), LoginActivty.class));
                 return true;
-            case R.id.search:
-                break;
         }
         return false;
     }

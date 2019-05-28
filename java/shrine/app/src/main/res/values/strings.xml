@@ -52,6 +52,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fir_your_products">Tus productos</string>
     <string name="fir_usr_products">Tus productos</string>
+    <string name="fir_about_1">Esta aplicacion ha sido desarollado por Fernando Perez de la torre Muñoz</string>
+    <string name="fir_about_2">Version 1.0.0</string>
+    <string name="fir_about_3">Si tienes alguna sugerencia sobre la aplicacion escribe a fernandoperezdelatorremunoz@gmail.com</string>
 
 
 </resources>

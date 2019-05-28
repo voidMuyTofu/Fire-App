@@ -56,32 +56,29 @@ public class  RegisterUser extends Fragment {
         initComponents(view);
 
 
-        btNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = etUsername.getText().toString();
-                String password = etPass.getText().toString();
-                String email = etEmail.getText().toString();
+        btNext.setOnClickListener(v -> {
+            String username = etUsername.getText().toString();
+            String password = etPass.getText().toString();
+            String email = etEmail.getText().toString();
 
-                if(!isUserValid(username)){
-                    tiUsername.setError(getString(R.string.fir_error_username));
-                    return;
-                }
-                if(!isPasswordValid(password)){
-                    tiPass.setError(getString(R.string.fir_error_password));
-                    return;
-                }
-                if(!isValidEmailAddress(email)){
-                    tiEmail.setError(getString(R.string.fir_error_email));
-                    return;
-                }
-                
-                tiUsername.setError(null);
-                tiPass.setError(null);
-                tiEmail.setError(null);
-
-                registerUser(username, email, password);
+            if(!isUserValid(username)){
+                tiUsername.setError(getString(R.string.fir_error_username));
+                return;
             }
+            if(!isPasswordValid(password)){
+                tiPass.setError(getString(R.string.fir_error_password));
+                return;
+            }
+            if(!isValidEmailAddress(email)){
+                tiEmail.setError(getString(R.string.fir_error_email));
+                return;
+            }
+
+            tiUsername.setError(null);
+            tiPass.setError(null);
+            tiEmail.setError(null);
+
+            registerUser(username, email, password);
         });
 
         return view;
@@ -89,30 +86,24 @@ public class  RegisterUser extends Fragment {
 
     private void registerUser(final String username, String email, String pass) {
         auth.createUserWithEmailAndPassword(email, pass)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            FirebaseUser firebaseUser = auth.getCurrentUser();
-                            String userid = firebaseUser.getUid();
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        FirebaseUser firebaseUser = auth.getCurrentUser();
+                        String userid = firebaseUser.getUid();
 
-                            reference = FirebaseDatabase.getInstance().getReference("users").child(userid);
+                        reference = FirebaseDatabase.getInstance().getReference("users").child(userid);
 
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("iduser", userid);
-                            hashMap.put("username", username);
-                            hashMap.put("imageurl", "default");
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("iduser", userid);
+                        hashMap.put("username", username);
+                        hashMap.put("imageurl", "default");
 
-                            reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()) {
-                                        Intent intent = new Intent(getContext(), MainActivity.class);
-                                        startActivity(intent);
-                                    }
-                                }
-                            });
-                        }
+                        reference.setValue(hashMap).addOnCompleteListener(task1 -> {
+                            if(task1.isSuccessful()) {
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                startActivity(intent);
+                            }
+                        });
                     }
                 });
     }

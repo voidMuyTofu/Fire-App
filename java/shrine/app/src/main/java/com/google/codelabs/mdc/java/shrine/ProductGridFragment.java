@@ -66,6 +66,31 @@ public class ProductGridFragment extends Fragment {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("productentry");
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    ProductEntry product = snapshot.getValue(ProductEntry.class);
+                    String userId = (String) snapshot.child("userid").getValue();
+                    String url = (String) snapshot.child("url").getValue();
+                    product.setUserId(userId);
+                    product.setUrl(url);
+                    //con esta condicion dejamos fuera de la grid principal nuestros productos
+                    /*if(products.contains(product) || firebaseUser.getUid().equals(product.getUserId()))
+                        continue;*/
+
+                    products.add(product);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        reference.addValueEventListener(valueEventListener);
+
 
         products = new ArrayList<>();
         productImages = new ArrayList<>();
@@ -85,9 +110,12 @@ public class ProductGridFragment extends Fragment {
         btMessages.setOnClickListener(v -> ((NavigationHost)getContext()).navigateTo(new MessagesFragment(), true));
         //Listener boton Tus productos
         btUserProducts.setOnClickListener(v -> ((NavigationHost)getContext()).navigateTo(new ProductGridUserFragment(), true));
+        //Listeners boton About
+        btAbout.setOnClickListener(v ->((NavigationHost)getContext()).navigateTo(new AboutFragment(), true));
 
         testProducts = ProductEntry.initProductEntryList(getResources());
         products.addAll(testProducts);
+
 
 
         ProductCardRecyclerViewAdapter adapter = new ProductCardRecyclerViewAdapter(
@@ -102,7 +130,7 @@ public class ProductGridFragment extends Fragment {
         int largePadding = getResources().getDimensionPixelSize(R.dimen.fir_product_grid_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.fir_staggered_product_grid_spacing_small);
         recyclerView.addItemDecoration(new ProductGridItemDecoration(largePadding,smallPadding));
-
+        adapter.notifyDataSetChanged();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             view.findViewById(R.id.product_grid).setBackground(getContext().getDrawable(
                     R.drawable.fir_product_grid_background_shape));
@@ -150,8 +178,6 @@ public class ProductGridFragment extends Fragment {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getContext(), LoginActivty.class));
                 return true;
-            case R.id.search:
-                break;
         }
         return false;
     }
@@ -160,30 +186,14 @@ public class ProductGridFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    ProductEntry product = snapshot.getValue(ProductEntry.class);
-                    String userId = (String) snapshot.child("userid").getValue();
-                    String url = (String) snapshot.child("url").getValue();
-                    product.setUserId(userId);
-                    product.setUrl(url);
-                    //con esta condicion dejamos fuera de la grid principal nuestros productos
-                    if(products.contains(product) || firebaseUser.getUid().equals(product.getUserId()))
-                        continue;
 
-                    products.add(product);
-                }
-            }
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    @Override
+    public void onStart() {
+        super.onStart();
 
-            }
-        };
 
-        reference.addValueEventListener(valueEventListener);
     }
 
     private void initComponents(View view){

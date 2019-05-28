@@ -39,6 +39,10 @@ public class  MessagesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fir_messages_fragment, container, false);
         setUpToolbar(view);
 
+        reference = FirebaseDatabase.getInstance().getReference("chatlist");
+
+
+        chatList();
         recyclerView = view.findViewById(R.id.messages_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -50,60 +54,30 @@ public class  MessagesFragment extends Fragment {
 
         conversations = new ArrayList<>();
 
-        reference = FirebaseDatabase.getInstance().getReference("chatlist").child(firebaseUser.getUid());
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                chatList();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         return view;
     }
- /*
+
     @Override
     public void onResume() {
         super.onResume();
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    ChatList chat = snapshot.getValue(ChatList.class);
-                    conversations.add(chat);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-
-        reference.addValueEventListener(valueEventListener);
-    }*/
+    }
 
     private void chatList(){
-        users = new ArrayList<>();
-        reference = FirebaseDatabase.getInstance().getReference("users");
+        conversations = new ArrayList<>();
+        reference = FirebaseDatabase.getInstance().getReference("chatlist");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                users.clear();
+                conversations.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    User user = snapshot.getValue(User.class);
-                    for(ChatList chat : conversations){
-                        if(user.getId().equals(chat.getId())){
-                            conversations.add(chat);
-                        }
-                    }
+                    ChatList chat = snapshot.getValue(ChatList.class);
+                    conversations.add(chat);
                 }
-                chatAdapter = new ChatAdapter(getContext(), conversations);
+                chatAdapter = new ChatAdapter(getContext(), conversations, item -> {
+
+                });
                 recyclerView.setAdapter(chatAdapter);
             }
 
