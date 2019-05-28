@@ -5,16 +5,18 @@ public class Message {
     private String reciever;
     private String message;
     private String productname;
+    private boolean issen;
 
     public Message() {
 
     }
 
-    public Message(String sender, String reciever, String message, String productName) {
+    public Message(String sender, String reciever, String message, String productName, boolean issen) {
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
         this.productname = productName;
+        this.issen = issen;
     }
 
     public String getSender() {
@@ -47,5 +49,11 @@ public class Message {
 
     public void setProductName(String productName) {
         this.productname = productName;
+    }
+
+    public boolean isIssen() { return issen;
+    }
+
+    public void setIssen(boolean issen) { this.issen = issen;
     }
 }

@@ -2,10 +2,7 @@ package com.google.codelabs.mdc.
         java.shrine;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,12 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.codelabs.mdc.java.shrine.java.Image;
-import com.google.codelabs.mdc.java.shrine.java.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -55,6 +51,8 @@ public class FormFragment extends Fragment {
     private Uri imageToUpload;
     public int i;
     public int position;
+
+    String goodUrl;
 
     private ImageView ivProduct1;
     private ImageView ivProduct2;
@@ -92,7 +90,7 @@ public class FormFragment extends Fragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fir_fragment_form, container, false);
+        View view = inflater.inflate(R.layout.fir_form_fragment, container, false);
         setUpToolbar(view);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -131,6 +129,7 @@ public class FormFragment extends Fragment {
 
         btUpload.setOnClickListener(v -> {
             uploadProduct();
+            System.out.println(goodUrl);
             ((NavigationHost)getContext()).navigateTo(new ProductGridFragment(), false);
         });
             
@@ -143,10 +142,6 @@ public class FormFragment extends Fragment {
         startActivityForResult(intent, RESULTADO_CARGA_FINAL);
     }
 
-    private boolean checkImageViews(List<ImageView> images){
-        return true;
-    }
-
 
     private void setUpToolbar(View view){
         Toolbar toolbar = view.findViewById(R.id.app_bar);
@@ -157,6 +152,7 @@ public class FormFragment extends Fragment {
     }
     private void uploadProduct() {
         List<String> imagesToUpload = new ArrayList<>();
+        String url;
 
         for(String image : imagesString){
             if(image != null){
@@ -169,38 +165,36 @@ public class FormFragment extends Fragment {
             long imageName = System.currentTimeMillis();
             StorageReference fileReference = storageReference.child(imageName
                     + "." + getFileExtension(imageToUpload));
-            fileReference.putFile(imageToUpload).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    fileReference .getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            imagesToUpload.add(String.valueOf(task.getResult()));
-                        }
-                    });
-                }
+            fileReference.putFile(imageToUpload).addOnSuccessListener(command ->{
+                Task<Uri> task = fileReference.getDownloadUrl();
+                goodUrl = task.toString();
             });
+
+            System.out.println(String.valueOf(fileReference.getStorage().getReference("uploads")
+                    .child(String.valueOf(imageName)).getDownloadUrl()));
         }
 
+
         if(etName.getText().toString().equals("")){
-            etName.setError(@strings/fir_error_title);
+            etName.setError(getResources().getString(R.string.fir_error_title));
             return;
         }
         if(etDescription.getText().toString().equals("")){
-            etDescription.setError(@strings/fir_error_description);
+            etDescription.setError(getResources().getString(R.string.fir_error_description));
             return;       
         }
         if(etSize.getText().toString().equals("")){
-            etSize.setError(@strings/fir_error_size);
+            etSize.setError(getResources().getString(R.string.fir_error_size));
             return;       
         }
         if(etPrice.getText().toString().equals("")){
-            etPrice.setError(@strings/fir_error_price);
+            etPrice.setError(getResources().getString(R.string.fir_error_price));
             return;
         }
 
         if(imagesToUpload.size() == 0){
-            Toast.makeToast(getContext(), "Debes seleccionar al menos una imagen", Toast.LENGHT.LONG).show;
+            Toast.makeText(getContext(), getResources().getString(R.string.fir_error_images), Toast.LENGTH_LONG).show();
+            return;
         }
            
         etName.setError(null);

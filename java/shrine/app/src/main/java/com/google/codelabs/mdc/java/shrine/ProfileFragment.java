@@ -1,7 +1,12 @@
 package com.google.codelabs.mdc.java.shrine;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,7 +26,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class  ProductPageFragment extends Fragment {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.app.Activity.RESULT_OK;
+
+public class ProfileFragment extends Fragment {
 
     private TextView tvTitle;
     private TextView tvDescription;
@@ -29,11 +38,14 @@ public class  ProductPageFragment extends Fragment {
     private TextView tvPrice;
     private MaterialButton btMessage;
     private ImageView ivImage;
+    private CircleImageView profileImage;
     private String [] images;
     public String iduser;
     private ImageRequester imageRequester;
-    
     private FirebaseUser firebaseUser;
+    Uri imageUri;
+
+    private final int RESULTADO_CARGA_FINAL = 1;
 
 
     @Override
@@ -42,7 +54,7 @@ public class  ProductPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fir_product_page_fragment, container, false);
 
         initComponent(view);
-        
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         displayInfo();
@@ -54,9 +66,11 @@ public class  ProductPageFragment extends Fragment {
             bundle1.putString("userId", getArguments().get("userId").toString());
             ((NavigationHost)getContext()).navigateTo(new ChatFragment(), true, bundle1);
         });
+
+        profileImage.setOnClickListener(v -> setImage());
         return view;
     }
-    
+
     private void displayInfo(){
         Bundle bundle;
         bundle = this.getArguments();
@@ -71,7 +85,12 @@ public class  ProductPageFragment extends Fragment {
             images = (String[]) bundle.get("imagesurl");
         }
     }
-    
+
+    private void setImage(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, RESULTADO_CARGA_FINAL);
+    }
+
     private void initComponent(View view){
         tvTitle = view.findViewById(R.id.fir_product_title);
         tvDescription = view.findViewById(R.id.fir_product_descripction);
@@ -79,5 +98,17 @@ public class  ProductPageFragment extends Fragment {
         tvSize = view.findViewById(R.id.fir_product_size);
         ivImage = view.findViewById(R.id.fir_product_image);
         btMessage = view.findViewById(R.id.fir_bt_message);
+        profileImage = view.findViewById(R.id.profile_image);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == RESULTADO_CARGA_FINAL && resultCode == RESULT_OK && data != null){
+            imageUri = data.getData();
+            profileImage.setImageURI(imageUri);
+        }
     }
 }

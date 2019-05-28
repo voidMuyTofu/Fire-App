@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductGridFragment">
+
+    <LinearLayout
+        style="@style/Widget.Fire.Backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="100dp"
+        android:paddingBottom="100dp">
+
+        <include layout="@layout/fir_backdrop" />
+    </LinearLayout>
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/fir_appbar2"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        tools:ignore="MissingConstraints">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/fir_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark">
+
+            <ImageView
+                android:id="@+id/fir_bt_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/left_arrow"
+                />
+
+            <TextView
+                android:id="@+id/fir_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Fire.Subtitle1"
+                android:textSize="25sp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/fir_your_products"/>
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingTop="53dp">
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/product_grid"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:background="@color/productGridBackgroundColor"
+            android:paddingStart="@dimen/fir_product_grid_spacing_small"
+            android:paddingEnd="@dimen/fir_product_grid_spacing_small"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
+</FrameLayout>

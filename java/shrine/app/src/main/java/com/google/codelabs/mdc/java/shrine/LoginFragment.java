@@ -25,10 +25,19 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
 public class LoginFragment extends Fragment {
 
     private FirebaseAuth auth;
     private FirebaseUser firebaseUser;
+    private TextInputLayout emailTextInput;
+    private TextInputEditText emailEditText;
+    private TextInputLayout passwordTextInput;
+    private TextInputEditText passwordEditText;
+    private TextView tvNewUser;
+    private MaterialButton btNext;
 
     @Override
     public View onCreateView(
@@ -43,34 +52,26 @@ public class LoginFragment extends Fragment {
         checkForSignedUser();
 
         //Error para el campo contraseña
-        btNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = emailEditText.getText().toString();
-                String pass = passwordEditText.getText().toString();
+        btNext.setOnClickListener(v -> {
+            String email = emailEditText.getText().toString();
+            String pass = passwordEditText.getText().toString();
 
-                if(!(isPasswordValid(pass))) {
-                    passwordTextInput.setError(getString(R.string.fir_error_password));
-                    return;
-                }
-                if(isValidEmailAddress(email)) {
-                    emailTextInput.setError(getString(R.string.fir_error_email));
-                    return;
-                }
-
-                passwordTextInput.setError(null);
-                emailTextInput.setError(null);
-                
-                signInWithEmailAndPass(email,pass);
+            if(!isPasswordValid(pass)) {
+                passwordTextInput.setError(getString(R.string.fir_error_password));
+                return;
             }
+            if(!isValidEmailAddress(email)) {
+                emailTextInput.setError(getString(R.string.fir_error_email));
+                return;
+            }
+
+            passwordTextInput.setError(null);
+            emailTextInput.setError(null);
+
+            signInWithEmailAndPassword(email,pass);
         });
 
-        tvNewUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((NavigationHost)v.getContext()).navigateTo(new RegisterUser(), true);
-            }
-        });
+        tvNewUser.setOnClickListener(v -> ((NavigationHost)v.getContext()).navigateTo(new RegisterUser(), true));
 
 
 
@@ -81,24 +82,23 @@ public class LoginFragment extends Fragment {
         return pass != null && pass.length() >= 8;
     }
     
-    private checkForSignedUser(){
+    private void checkForSignedUser(){
         if(firebaseUser != null){
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);
+            getActivity().finish();
         }
     }
     
-    private signInWithEmailAndPassword(String email, String pass){
+    private void signInWithEmailAndPassword(String email, String pass){
         auth.signInWithEmailAndPassword(email,pass)
-                        .addOnCompleteListener((Activity) v.getContext(), new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    Intent intent = new Intent(getContext(), MainActivity.class);
-                                    startActivity(intent);
-                                }else{
-                                    Toast.makeText(getContext(),"Usuario incorrecto",Toast.LENGTH_LONG).show();
-                                }
+                        .addOnCompleteListener((Activity) getContext(), (OnCompleteListener<AuthResult>) task -> {
+                            if(task.isSuccessful()){
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }else{
+                                Toast.makeText(getContext(),"Usuario incorrecto",Toast.LENGTH_LONG).show();
                             }
                         });
     }
@@ -114,12 +114,12 @@ public class LoginFragment extends Fragment {
         return result;
     }
     
-    private initComponents(View view){
-        TextInputLayout emailTextInput = view.findViewById(R.id.email_text_input);
-        TextInputEditText emailEditText = view.findViewById(R.id.email_edit_text);
-        TextInputLayout passwordTextInput = view.findViewById(R.id.password_text_input);
-        TextInputEditText passwordEditText = view.findViewById(R.id.password_edit_text);
-        TextView tvNewUser = view.findViewById(R.id.fir_new_user);
-        MaterialButton btNext = view.findViewById(R.id.next_button);
+    private void initComponents(View view){
+        emailTextInput = view.findViewById(R.id.email_text_input);
+        emailEditText = view.findViewById(R.id.email_edit_text);
+        passwordTextInput = view.findViewById(R.id.password_text_input);
+        passwordEditText = view.findViewById(R.id.password_edit_text);
+        tvNewUser = view.findViewById(R.id.fir_new_user);
+        btNext = view.findViewById(R.id.next_button);
     }
 }

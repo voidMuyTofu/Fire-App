@@ -35,14 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProductGridFragment extends Fragment {
+public class ProductGridUserFragment extends Fragment {
 
-    FloatingActionButton fab;
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
-    private MaterialButton btUserProducts;
-    private MaterialButton btAbout;
-    private MaterialButton btMessages;
     private RecyclerView recyclerView;
 
     private List<ProductEntry> products;
@@ -61,7 +57,7 @@ public class ProductGridFragment extends Fragment {
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fir_product_grid_fragment, container, false);
+        View view =  inflater.inflate(R.layout.fir_product_grid_user_fragment, container, false);
         setUpToolbar(view);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -72,32 +68,26 @@ public class ProductGridFragment extends Fragment {
 
 
         //inicializar componentes
-        initComponents(view);
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),
-                2,GridLayoutManager.VERTICAL,false));  
+                2,GridLayoutManager.VERTICAL,false));
 
         //Listener boton Nuevo producto
-        fab.setOnClickListener(v -> ((NavigationHost)getContext()).navigateTo(new FormFragment(), true));
 
         //Listener boton Mensajes
-        btMessages.setOnClickListener(v -> ((NavigationHost)getContext()).navigateTo(new MessagesFragment(), true));
-        //Listener boton Tus productos
-        btUserProducts.setOnClickListener(v -> ((NavigationHost)getContext()).navigateTo(new ProductGridUserFragment(), true));
-
         testProducts = ProductEntry.initProductEntryList(getResources());
         products.addAll(testProducts);
 
 
         ProductCardRecyclerViewAdapter adapter = new ProductCardRecyclerViewAdapter(
                 products,getContext(), item -> {
-                    Bundle bundle = createBundle(item);
-                    ((NavigationHost)getContext()).navigateTo(new ProductPageFragment(), true, bundle);
+            Bundle bundle = createBundle(item);
+            ((NavigationHost)getContext()).navigateTo(new ProductPageFragment(), true, bundle);
 
-                });
-        
-        
+        });
+
+
         recyclerView.setAdapter(adapter);
         int largePadding = getResources().getDimensionPixelSize(R.dimen.fir_product_grid_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.fir_staggered_product_grid_spacing_small);
@@ -118,10 +108,6 @@ public class ProductGridFragment extends Fragment {
         if(activity != null) {
             activity.setSupportActionBar(toolbar);
         }
-        toolbar.setNavigationOnClickListener(new NavigationIconClickListener(
-                getContext(), view.findViewById(R.id.product_grid),
-                new AccelerateDecelerateInterpolator(),getContext().getResources().getDrawable(R.drawable.fir_branded_menu),
-                getContext().getResources().getDrawable(R.drawable.fir_close_menu)));
     }
 
     private Bundle createBundle(ProductEntry item){
@@ -144,7 +130,7 @@ public class ProductGridFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        
+
         switch (item.getItemId()){
             case R.id.sign_out:
                 FirebaseAuth.getInstance().signOut();
@@ -169,8 +155,7 @@ public class ProductGridFragment extends Fragment {
                     String url = (String) snapshot.child("url").getValue();
                     product.setUserId(userId);
                     product.setUrl(url);
-                    //con esta condicion dejamos fuera de la grid principal nuestros productos
-                    if(products.contains(product) || firebaseUser.getUid().equals(product.getUserId()))
+                    if(!firebaseUser.getUid().equals(product.getUserId()))
                         continue;
 
                     products.add(product);
@@ -184,12 +169,5 @@ public class ProductGridFragment extends Fragment {
         };
 
         reference.addValueEventListener(valueEventListener);
-    }
-
-    private void initComponents(View view){
-        btAbout = view.findViewById(R.id.backdrop_about);
-        btMessages = view.findViewById(R.id.backdrop_messages);
-        btUserProducts = view.findViewById(R.id.backdrop_user_products);
-        fab = view.findViewById(R.id.fir_fab_add);
     }
 }

@@ -7,6 +7,12 @@
     <string name="fir_error_email">Introduce un email válido</string>
     <string name="fir_error_username">El usuario debe tener al menos 6 caracteres</string>
     <string name="fir_error_password">La contraseña debe tener al menos 8 caracteres.</string>
+    <string name="fir_error_title">Debes poner un nombre al producto</string>
+    <string name="fir_error_description">Debes poner una descripcion al producto</string>
+    <string name="fir_error_price">Debes poner un precio al producto</string>
+    <string name="fir_error_size">Debes poner una talla al producto</string>
+    <string name="fir_error_images">Debes añadir al menos una imagen</string>
+    <string name="fir_error_user_id">Error al obtener el usuario</string>
     <string name="fir_filter_title">Filtro</string>
     <string name="fir_search_title">Busqueda</string>
     <string name="fir_user_image">Foto</string>
@@ -40,6 +46,12 @@
     <string name="fir_about">Acerca de</string>
     <string name="fir_settings">Ajustes</string>
     <string name="fir_upload">Subir</string>
+    <string name="fir_conversations">Conversaciones</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fir_your_products">Tus productos</string>
+    <string name="fir_usr_products">Tus productos</string>
 
 
 </resources>

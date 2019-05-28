@@ -16,14 +16,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.google.codelabs.mdc.java.shrine.adapters.MessageAdapter;
 import com.google.codelabs.mdc.java.shrine.java.Message;
-import com.google.codelabs.mdc.java.shrine.network.ImageRequester;
+import com.google.codelabs.mdc.java.shrine.network.ProductEntry;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,7 +40,8 @@ public class ChatFragment extends Fragment {
     private TextInputLayout tiMessage;
     private MaterialButton btSend;
     private TextView tvProductName;
-    DatabaseReference databaseReference;
+    DatabaseReference reference;
+    DatabaseReference chatref;
     private FirebaseUser firebaseUser;
 
     private String userId;
@@ -60,18 +58,24 @@ public class ChatFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fir_chat_fragment, container, false);
 
-        //Set ToolBar
-
         setUpToolbar(view);
+        initComponents(view);
 
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            userId = (String) bundle.get("userId");
+            productName = (String) bundle.get("title");
+            imageUrl = (String) bundle.get("url");
+        }
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        userId = getArguments().get("userId").toString();
-        productName = getArguments().get("title").toString();
-        imageUrl = getArguments().get("url").toString();
+        reference = FirebaseDatabase.getInstance().getReference("chat")
+                .child(firebaseUser.getUid());
 
+        recyclerView = view.findViewById(R.id.fir_list_messages);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         tvProductName.setText(productName);
@@ -80,13 +84,27 @@ public class ChatFragment extends Fragment {
             String message = etMessage.getText().toString();
             if(!message.equals("")){
                 sendMessage(firebaseUser.getUid(), userId, message, productName);
+                System.out.println(userId);
+            }
+        });
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                readMessage(firebaseUser.getUid(), userId, productName);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
         return view;
     }
 
-    private void sendMessage(String sender, final String reciever, String message, final String productName) {
+    private void sendMessage(String sender, final String reciever, String message, String productName) {
+
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String, Object> map = new HashMap<>();
@@ -95,25 +113,22 @@ public class ChatFragment extends Fragment {
         map.put("reciever", reciever);
         map.put("message", message);
         map.put("productname", productName);
-        map.put("issen", false);
+        map.put("isseen", false);
 
-        reference.child("chats").push().setValue(map);
+        reference.child("chat").push().setValue(map);
+
+        //abrir una conversacion para el nuevo chat
 
         final DatabaseReference chatref = FirebaseDatabase.getInstance().getReference("chatlist")
-                .child(firebaseUser.getUid())
-                .child(userId);
-
-        //añadir la conversacion al MessagesFragment
+                .child(firebaseUser.getUid());
         chatref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("userId", userId);
-                    map.put("productName", productName);
-                    map.put("imageUrl", imageUrl);
-                    chatref.setValue(map);
+                    chatref.child("fbuser").setValue(firebaseUser.getUid());
+                    chatref.child("userid").setValue(userId);
                 }
+
             }
 
             @Override
@@ -121,24 +136,33 @@ public class ChatFragment extends Fragment {
 
             }
         });
+
+        HashMap<String, Object> hashmap = new HashMap<>();
+        hashmap.put("userId", userId);
+        hashmap.put("productName", productName);
+        hashmap.put("imageUrl", imageUrl);
+
+        reference.child("chatlist").push().setValue(hashmap);
+
         etMessage.setText("");
     }
 
-    private void readMessage(final String myId, final String userId,final String productName){
+    private void readMessage(final String myid, final String userid, final String productName){
         messages = new ArrayList<>();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("chats");
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        reference = FirebaseDatabase.getInstance().getReference("chat");
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 messages.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Message message = snapshot.getValue(Message.class);
-                    if (message.getReciever().equals(userId) && message.getSender().equals(myId)
-                            && message.getProductName().equals(productName)) {
+                    if((message.getSender().equals(myid) && message.getReciever().equals(userid)
+                        && message.getProductName().equals(productName))
+                            ){
                         messages.add(message);
                     }
+
                     messageAdapter = new MessageAdapter(getContext(), messages);
                     recyclerView.setAdapter(messageAdapter);
                 }
@@ -170,8 +194,6 @@ public class ChatFragment extends Fragment {
 
         switch (item.getItemId()){
             case R.id.sign_out:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getContext(), LoginActivty.class));
                 return true;
             case R.id.search:
                 break;
@@ -179,19 +201,11 @@ public class ChatFragment extends Fragment {
         return false;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     private void initComponents(View view){
         etMessage = view.findViewById(R.id.fir_message_edit_text);
         tiMessage = view.findViewById(R.id.fir_message_text_input);
         btSend = view.findViewById(R.id.fir_bt_send);
         tvProductName = view.findViewById(R.id.fir_product_name);
-        recyclerView = view.findViewById(R.id.fir_list_messages);
     }
-
-
 
 }

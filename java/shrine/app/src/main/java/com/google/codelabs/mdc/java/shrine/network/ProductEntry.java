@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.google.codelabs.mdc.java.shrine.R;
-import com.google.codelabs.mdc.java.shrine.java.Product;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -33,7 +32,7 @@ public class ProductEntry implements Serializable {
     private String price;
     private String description;
     private String size;
-    private String idUser;
+    private String userId;
     private String[] images;
 
     public ProductEntry(){
@@ -41,14 +40,14 @@ public class ProductEntry implements Serializable {
     }
 
     public ProductEntry(
-            String title, String dynamicUrl, String url, String price, String description,String size,String idUser, String[] images) {
+            String title, String dynamicUrl, String url, String price, String description, String size, String userId, String[] images) {
         this.title = title;
         this.dynamicUrl = Uri.parse(dynamicUrl);
         this.url = url;
         this.price = price;
         this.description = description;
         this.size = size;
-        this.idUser = idUser;
+        this.userId = userId;
         this.images = images;
     }
 
@@ -128,12 +127,12 @@ public class ProductEntry implements Serializable {
         this.size = size;
     }
 
-    public String getIdUser() {
-        return idUser;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String[] getImages() {

@@ -13,7 +13,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/sign_out"
-        android:icon="@mipmap/sign_out"
+        android:icon="@drawable/sign_out"
         android:title="@string/fir_sing_out"
         app:showAsAction="always"
         />
